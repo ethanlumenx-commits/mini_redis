@@ -1,0 +1,60 @@
+2026-05-20T13:08:10.169418Z  INFO mini_redis: Starting mini-redis server
+2026-05-20T13:08:10.176239Z  INFO mini_redis: Listening on 127.0.0.1:6379
+2026-05-20T13:08:15.455856Z  INFO mini_redis: Accepted connection from 127.0.0.1:42435
+2026-05-20T13:08:15.456246Z  INFO mini_redis: Handling connection from 127.0.0.1:42435
+2026-05-20T13:08:16.868949Z  INFO mini_redis: Received 14 bytes
+2026-05-20T13:08:16.869693Z  INFO mini_redis: Failed to read from socket: 远程主机强迫关闭了一个现有的连接。 (os error 10054)
+2026-05-20T13:10:14.703895Z  INFO mini_redis: Starting mini-redis server
+2026-05-20T13:10:14.711194Z  INFO mini_redis: Listening on 127.0.0.1:6379
+2026-05-20T13:10:18.748497Z  INFO mini_redis: Accepted connection from 127.0.0.1:42623
+2026-05-20T13:10:18.748751Z  INFO mini_redis: Handling connection from 127.0.0.1:42623
+2026-05-20T13:10:22.398314Z  INFO mini_redis: Received 14 bytes
+2026-05-20T13:10:24.868690Z  INFO mini_redis: Received 11 bytes
+2026-05-20T13:10:26.292990Z  INFO mini_redis: Received 11 bytes
+2026-05-20T13:10:27.916937Z  INFO mini_redis: Received 11 bytes
+2026-05-20T13:21:42.605038Z  INFO mini_redis: Received 11 bytes
+2026-05-20T13:22:02.045118Z  INFO mini_redis: Received 11 bytes
+2026-05-20T13:22:10.189114Z  INFO mini_redis: Received 11 bytes
+2026-05-20T13:23:08.979145Z  INFO mini_redis: Failed to read from socket: 远程主机强迫关闭了一个现有的连接。 (os error 10054)
+2026-05-20T13:28:31.962031Z  INFO mini_redis: Starting mini-redis server
+2026-05-20T13:28:31.969923Z  INFO mini_redis: Listening on 127.0.0.1:6379
+2026-05-20T13:28:42.278182Z  INFO mini_redis: Accepted connection from 127.0.0.1:43578
+2026-05-20T13:28:42.278454Z  INFO mini_redis: Handling connection from 127.0.0.1:43578
+2026-05-20T13:28:44.604297Z  INFO mini_redis: Received 14 bytes
+2026-05-20T13:28:47.061241Z  INFO mini_redis: Received 11 bytes
+2026-05-20T13:28:49.181897Z  INFO mini_redis: Failed to read from socket: 远程主机强迫关闭了一个现有的连接。 (os error 10054)
+2026-05-20T13:43:42.265284Z  INFO mini_redis: Accepted connection from 127.0.0.1:44518
+2026-05-20T13:43:42.265468Z  INFO mini_redis: Handling connection from 127.0.0.1:44518
+2026-05-20T13:43:44.003685Z  INFO mini_redis: Received 11 bytes
+2026-05-20T13:43:53.681142Z  INFO mini_redis: Starting mini-redis server
+2026-05-20T13:43:53.688814Z  INFO mini_redis: Listening on 127.0.0.1:6379
+2026-05-20T13:44:08.923783Z  INFO mini_redis: Accepted connection from 127.0.0.1:44531
+2026-05-20T13:44:08.924078Z  INFO mini_redis: Handling connection from 127.0.0.1:44531
+2026-05-20T13:44:10.820127Z  INFO mini_redis: Received 11 bytes
+2026-05-20T13:44:30.675829Z  INFO mini_redis: Received 11 bytes
+2026-05-20T13:44:34.234213Z  INFO mini_redis: Failed to read from socket: 远程主机强迫关闭了一个现有的连接。 (os error 10054)
+2026-05-20T13:44:47.895669Z  INFO mini_redis: Starting mini-redis server
+2026-05-20T13:44:47.904558Z  INFO mini_redis: Listening on 127.0.0.1:6379
+2026-05-20T13:44:52.421848Z  INFO mini_redis: Accepted connection from 127.0.0.1:44586
+2026-05-20T13:44:52.422159Z  INFO mini_redis: Handling connection from 127.0.0.1:44586
+2026-05-20T13:44:53.260631Z  INFO mini_redis: Received 11 bytes
+2026-05-20T13:45:28.599096Z  INFO mini_redis: Failed to read from socket: 远程主机强迫关闭了一个现有的连接。 (os error 10054)
+2026-05-20T13:46:19.227328Z  INFO mini_redis: Starting mini-redis server
+2026-05-20T13:46:19.235000Z  INFO mini_redis: Listening on 127.0.0.1:6379
+2026-05-20T13:46:25.275952Z  INFO mini_redis: Accepted connection from 127.0.0.1:45037
+2026-05-20T13:46:25.276216Z  INFO mini_redis: Handling connection from 127.0.0.1:45037
+2026-05-20T13:46:26.395661Z  INFO mini_redis: Received 11 bytes
+2026-05-20T13:47:05.533283Z  INFO mini_redis: Failed to read from socket: 远程主机强迫关闭了一个现有的连接。 (os error 10054)
+2026-05-20T13:47:16.995024Z  INFO mini_redis: Accepted connection from 127.0.0.1:45084
+2026-05-20T13:47:16.995287Z  INFO mini_redis: Handling connection from 127.0.0.1:45084
+2026-05-20T13:47:20.284566Z  INFO mini_redis: Received 14 bytes
+2026-05-20T13:48:14.716745Z  INFO mini_redis: Starting mini-redis server
+2026-05-20T13:48:14.723998Z  INFO mini_redis: Listening on 127.0.0.1:6379
+2026-05-20T13:48:19.888110Z  INFO mini_redis: Accepted connection from 127.0.0.1:45230
+2026-05-20T13:48:19.888373Z  INFO mini_redis: Handling connection from 127.0.0.1:45230
+2026-05-20T13:48:21.507131Z  INFO mini_redis: Received 14 bytes
+2026-05-20T13:52:17.498889Z  INFO mini_redis: Received 14 bytes
+2026-05-20T13:52:22.346707Z  INFO mini_redis: Received 17 bytes
+2026-05-20T13:52:24.315207Z  INFO mini_redis: Received 14 bytes
+2026-05-20T13:52:38.098685Z  INFO mini_redis: Received 14 bytes
+2026-05-20T13:54:31.495691Z  INFO mini_redis: Failed to read from socket: 远程主机强迫关闭了一个现有的连接。 (os error 10054)
