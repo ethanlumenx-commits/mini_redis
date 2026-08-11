@@ -405,3 +405,4 @@ abc
 2026-08-09T14:28:38.984934Z  INFO mini_redis: Received CRLF at position 2
 2026-08-09T14:28:38.985160Z  INFO mini_redis: Received frame: Some(Array([BulkString(Some("i")), BulkString(Some("have")), BulkString(Some("a")), BulkString(Some("set"))]))
 2026-08-09T14:28:59.566711Z ERROR mini_redis: Failed to read from socket: 远程主机强迫关闭了一个现有的连接。 (os error 10054)
+2026-08-11T13:01:39.088131Z  INFO mini_redis: Starting mini-redis server

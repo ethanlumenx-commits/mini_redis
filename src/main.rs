@@ -2,12 +2,14 @@ use tokio::net::{TcpListener, TcpStream};
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tracing::{info, error};
 use bytes::{BytesMut,Buf};
-use std::sync::{Arc,RwLock};
+use std::sync::{Arc};
+use tokio::sync::RwLock;
+
 use std::collections::HashMap;
 
 mod logger;
 
-// type Db = Arc<RwLock<HashMap<String, String>>>;
+type Db = Arc<RwLock<HashMap<String, String>>>;
 
 
 
@@ -20,15 +22,19 @@ async fn main() {
     info!("Starting mini-redis server");
 
     let listener = TcpListener::bind("127.0.0.1:6379").await.expect("TcpListener.bind is error");
+
+    let db = Arc::new(RwLock::new(HashMap::new()));
     loop{
         // 阻塞并等待下一个连接
         let (stream, _addr) = listener.accept().await.expect("TcpListener.accept is error");
-        tokio::spawn(async { handle_client(stream).await });
+        let db_clone = db.clone();
+        tokio::spawn(async move{ handle_client(stream, db_clone).await });
     }
 
 }
 
-async fn handle_client(mut stream: TcpStream)  {
+// 不断从缓存区读取数据，解析并处理，直到客户端关闭
+async fn handle_client(mut stream: TcpStream, db: Db)  {
     // 创建一个可变的字节缓冲区
     let mut buf = BytesMut::with_capacity(1024);
 
@@ -42,14 +48,30 @@ async fn handle_client(mut stream: TcpStream)  {
             }
             Ok(n) => {
                 info!("Received {} bytes,buf total length {}", n, buf.len());
-                // 处理缓冲区中的数据
-                while let Some(pos) = buf.windows(2).position(|windows|windows == b"\r\n"){
-                    info!("Received CRLF at position {}", pos);
-                    let data = parse_frame(&mut buf);
-                    info!("Received frame: {:?}", data);
 
+
+                // 处理缓冲区中的数据
+                while let Some(data) =  parse_frame(&mut buf){
+                    info!("Received frame: {:?}", data);
+                    let response = handle_frame(data, &db).await;
+                    // 根据返回的RespFrame手动拼接RESP字节，临时测试用
+                    let send_buf = match response {
+                        RespFrame::SimpleString(s) => format!("+{s}\r\n"),
+                        RespFrame::Error(s) => format!("-{s}\r\n"),
+                        RespFrame::BulkString(Some(value)) => format!("${}\r\n{value}\r\n", value.len()),
+                        RespFrame::BulkString(None) => "$-1\r\n".to_string(),
+                        RespFrame::Array(_) => "-ERR unsupported array response\r\n".to_string(),
+                    };
+
+                    // 写回客户端
+                    if let Err(e) = stream.write_all(send_buf.as_bytes()).await {
+                        error!("send response error: {}", e);
+                        break;
+                    }
 
                 }
+
+                
 
             }
             Err(e) => {
@@ -59,17 +81,105 @@ async fn handle_client(mut stream: TcpStream)  {
         }
     }
 }
+
+
 #[derive(Debug)]
 enum RespFrame{
-    // SimpleString(String),
+    SimpleString(String),
     BulkString(Option<String>),
     Array(Vec<RespFrame>),
-    // Error(String),
+    Error(String),
 
 }
 
-// 读取以 \r\n 结尾的行数据，返回行数据，删除 \r\n
-pub fn read_line(buf:&mut BytesMut)->Option<Vec<u8>>{
+
+
+// 解析 RESP 框架
+pub async fn handle_frame(frame: RespFrame, db: &Db) -> RespFrame{
+    // match frame
+    match frame {
+        // 如果是respframe类型的数组
+        RespFrame::Array(items) => {
+            // 转为迭代器
+            let mut iter = items.into_iter();
+            // 获取第一个元素并匹配
+            let cmd = match iter.next(){
+                // 先匹配 BulkString，再匹配BulkString里的Option,转为大写
+                Some(RespFrame::BulkString(Some(s))) => s.to_uppercase(),
+                _ => return RespFrame::Error("Invalid frame".to_string()),
+            };
+
+            match cmd.as_str() {
+                "GET" =>{
+                    // 获取 key and_then 处理万一没有值的情况
+                    let key_opt = iter.next().and_then(|frame| match frame {
+                        RespFrame::BulkString(s) => s.clone(),
+                        _ => return None,
+                    });
+                    // 用第一个andthen返回的Option《String》进行下一轮判断
+                    let key = match key_opt {
+                        Some(key) => key,
+                        None => return RespFrame::Error("Invalid key".to_string()),
+                    };
+
+                    // 异步读锁
+                    let db = db.read().await;
+                    match db.get(&key){
+                        Some(value) => return RespFrame::SimpleString(value.clone()),
+                        None => return RespFrame::Error("Key not found".to_string()),
+                    }
+
+                }
+                "SET" =>{
+                    // 获取 key and_then 处理万一没有值的情况
+                    let key = iter.next().and_then(|frame| match frame {
+                        RespFrame::BulkString(s) => s.clone(),
+                        _ => return None,
+                    });
+                    // 获取 value and_then 处理万一没有值的情况
+                    let value = iter.next().and_then(|frame| match frame {
+                        RespFrame::BulkString(s) => s.clone(),
+                        _ => return None,
+                    });
+
+                    // insert key and value
+                    if let (Some(k), Some(v)) = (key, value) {
+                        let mut db = db.write().await;
+                        db.insert(k, v);
+                        return RespFrame::SimpleString("OK".to_string());
+                    }
+                    return RespFrame::Error("Invalid key or value".to_string());
+
+                }
+
+                "DEL" =>{
+                    // 获取 key and_then 处理万一没有值的情况
+                    let key = iter.next().and_then(|frame| match frame {
+                        RespFrame::BulkString(s) => s.clone(),
+                        _ => return None,
+                    });
+
+                    // delete key
+                    if let Some(key) = key {
+                        let mut db = db.write().await;
+                        db.remove(&key);
+                        return RespFrame::SimpleString("OK".to_string());
+                    }
+                    return RespFrame::Error("Invalid key".to_string());
+                }
+                _ => return RespFrame::Error("Invalid command".to_string()),
+            }
+
+            
+        },
+        _ => {},
+        
+    }
+    RespFrame::Error("dead_code".to_string())
+}
+
+// 读取以 \r\n 结尾的行数据，返回行数据，删除 \r\n  return b'123' -> Some([49,50,51])
+pub fn read_line(buf:&mut BytesMut)->  Option<Vec<u8>>{
     if let Some(pos) = buf.windows(2).position(|window| window == b"\r\n") {
         let content =buf.split_to(pos);
         buf.advance(2);
@@ -79,7 +189,7 @@ pub fn read_line(buf:&mut BytesMut)->Option<Vec<u8>>{
     }
 }
 
-
+// 解析 RESP 框架 return Some(Array([BulkString(Some("i")), BulkString(Some("have")), BulkString(Some("a"))
 pub fn parse_frame(buf:&mut BytesMut) -> Option<RespFrame>{
     let first = buf.first();
     if let Some(first) = first {
