@@ -406,3 +406,20 @@ abc
 2026-08-09T14:28:38.985160Z  INFO mini_redis: Received frame: Some(Array([BulkString(Some("i")), BulkString(Some("have")), BulkString(Some("a")), BulkString(Some("set"))]))
 2026-08-09T14:28:59.566711Z ERROR mini_redis: Failed to read from socket: 远程主机强迫关闭了一个现有的连接。 (os error 10054)
 2026-08-11T13:01:39.088131Z  INFO mini_redis: Starting mini-redis server
+2026-08-11T13:01:52.877463Z  INFO mini_redis: Received 30 bytes,buf total length 30
+2026-08-11T13:01:52.877840Z  INFO mini_redis: Received frame: Array([BulkString(Some("set")), BulkString(Some("a")), BulkString(Some("name"))])
+2026-08-11T13:01:55.782841Z  INFO mini_redis: Received 20 bytes,buf total length 20
+2026-08-11T13:01:55.783806Z  INFO mini_redis: Received frame: Array([BulkString(Some("get")), BulkString(Some("a"))])
+2026-08-11T13:02:03.782072Z  INFO mini_redis: Received 34 bytes,buf total length 34
+2026-08-11T13:02:03.782353Z  INFO mini_redis: Received frame: Array([BulkString(Some("set")), BulkString(Some("time")), BulkString(Some("first"))])
+2026-08-11T13:02:05.859545Z  INFO mini_redis: Received 23 bytes,buf total length 23
+2026-08-11T13:02:05.859767Z  INFO mini_redis: Received frame: Array([BulkString(Some("get")), BulkString(Some("time"))])
+2026-08-11T13:02:09.512549Z  INFO mini_redis: Received 20 bytes,buf total length 20
+2026-08-11T13:02:09.512799Z  INFO mini_redis: Received frame: Array([BulkString(Some("set")), BulkString(Some("a"))])
+2026-08-11T13:02:15.573537Z  INFO mini_redis: Received 20 bytes,buf total length 20
+2026-08-11T13:02:15.573779Z  INFO mini_redis: Received frame: Array([BulkString(Some("get")), BulkString(Some("a"))])
+2026-08-11T13:02:21.629525Z  INFO mini_redis: Received 32 bytes,buf total length 32
+2026-08-11T13:02:21.629795Z  INFO mini_redis: Received frame: Array([BulkString(Some("set")), BulkString(Some("a")), BulkString(Some("rename"))])
+2026-08-11T13:02:23.744407Z  INFO mini_redis: Received 20 bytes,buf total length 20
+2026-08-11T13:02:23.744693Z  INFO mini_redis: Received frame: Array([BulkString(Some("get")), BulkString(Some("a"))])
+2026-08-11T13:02:26.353523Z ERROR mini_redis: Failed to read from socket: 远程主机强迫关闭了一个现有的连接。 (os error 10054)
